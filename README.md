@@ -5,6 +5,7 @@
 > 핵심 주의: 현재 공개된 AI 모델 성능은 `source_type=synthetic`, `evaluation_scope=synthetic evaluation` 기준입니다. 실제 기기 사용 기록은 예측 입력으로 사용할 수 있지만, 현재 수치를 실제 사용자 성능으로 주장하면 안 됩니다.
 
 ![HabitGuard 대시보드](habitguard_android/docs/screen_timing_design/captures/home.png)
+AI로 만든 가상 이미지
 
 ## 프로젝트 바로가기
 
