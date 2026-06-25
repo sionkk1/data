@@ -1,0 +1,19 @@
+# Local/private phone exports must not be committed.
+habitguard_30_day_app_usage.csv
+*_phone_usage_private.csv
+ai/private_inputs/
+data/raw/
+docs/device_test_captures/
+docs/screen_timing_design/captures/*-uiautomator.xml
+ai/phone_outputs/phone_*
+
+# Android/local build state
+.gradle/
+.kotlin/
+build/
+app/build/
+local.properties
+
+# Python transient files
+__pycache__/
+*.pyc

@@ -1,0 +1,136 @@
+{
+  "source_type": "synthetic",
+  "evaluation_scope": "synthetic evaluation",
+  "best_model": "logistic_regression",
+  "best_baseline": "baseline_majority",
+  "accuracy": 0.8611,
+  "macro_f1": 0.8495,
+  "precision_macro": 0.8444,
+  "recall_macro": 0.8562,
+  "high_risk_recall": 0.84,
+  "baseline_improvement_pct": 115.0629,
+  "f1_macro": 0.8495,
+  "top_features": [
+    {
+      "feature": "weekday_6",
+      "importance": 1.977520670411337
+    },
+    {
+      "feature": "weekday_5",
+      "importance": 1.7734737655259827
+    },
+    {
+      "feature": "weekday_4",
+      "importance": 1.7256476839044321
+    },
+    {
+      "feature": "weekday_2",
+      "importance": 1.1951638792858104
+    },
+    {
+      "feature": "personal_goal_minutes",
+      "importance": 1.015573346580691
+    },
+    {
+      "feature": "rolling_3d_total",
+      "importance": 0.7572089381368038
+    },
+    {
+      "feature": "productivity",
+      "importance": 0.6410815468963472
+    },
+    {
+      "feature": "avg_session_minutes_proxy",
+      "importance": 0.5834208045321008
+    },
+    {
+      "feature": "open_count",
+      "importance": 0.491071537676541
+    },
+    {
+      "feature": "previous_day_total",
+      "importance": 0.4095738381623554
+    },
+    {
+      "feature": "weekday_3",
+      "importance": 0.37585316555327347
+    },
+    {
+      "feature": "total_minutes",
+      "importance": 0.373314867999685
+    },
+    {
+      "feature": "weekday_1",
+      "importance": 0.3656363632268364
+    },
+    {
+      "feature": "video",
+      "importance": 0.3647276938564235
+    },
+    {
+      "feature": "weekday_0",
+      "importance": 0.3622205306700358
+    }
+  ],
+  "labels": [
+    "within_goal",
+    "over_goal"
+  ],
+  "confusion_matrix": [
+    [
+      41,
+      6
+    ],
+    [
+      4,
+      21
+    ]
+  ],
+  "all_models": [
+    {
+      "model": "baseline_majority",
+      "accuracy": 0.6528,
+      "macro_f1": 0.395,
+      "precision_macro": 0.3264,
+      "recall_macro": 0.5,
+      "high_risk_recall": 0.0,
+      "baseline_improvement_pct": 0.0
+    },
+    {
+      "model": "logistic_regression",
+      "accuracy": 0.8611,
+      "macro_f1": 0.8495,
+      "precision_macro": 0.8444,
+      "recall_macro": 0.8562,
+      "high_risk_recall": 0.84,
+      "baseline_improvement_pct": 115.0629
+    },
+    {
+      "model": "decision_tree",
+      "accuracy": 0.7639,
+      "macro_f1": 0.7462,
+      "precision_macro": 0.7419,
+      "recall_macro": 0.7536,
+      "high_risk_recall": 0.72,
+      "baseline_improvement_pct": 88.9155
+    },
+    {
+      "model": "random_forest",
+      "accuracy": 0.8472,
+      "macro_f1": 0.8299,
+      "precision_macro": 0.8333,
+      "recall_macro": 0.8268,
+      "high_risk_recall": 0.76,
+      "baseline_improvement_pct": 110.0912
+    },
+    {
+      "model": "gradient_boosting",
+      "accuracy": 0.8056,
+      "macro_f1": 0.7926,
+      "precision_macro": 0.7867,
+      "recall_macro": 0.8043,
+      "high_risk_recall": 0.8,
+      "baseline_improvement_pct": 100.6564
+    }
+  ]
+}

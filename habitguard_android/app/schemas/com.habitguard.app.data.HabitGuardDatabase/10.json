@@ -1,0 +1,651 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 10,
+    "identityHash": "959906f5016d2e72144c2bea86ea7abd",
+    "entities": [
+      {
+        "tableName": "restriction_rule",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`targetPackage` TEXT NOT NULL, `targetName` TEXT NOT NULL, `limitMinutes` INTEGER NOT NULL, `startHour` INTEGER NOT NULL, `endHour` INTEGER NOT NULL, `restrictionMode` TEXT NOT NULL, `missionType` TEXT NOT NULL, `unlockMinutes` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `activeDaysMask` INTEGER NOT NULL, `sessionLimitMinutes` INTEGER NOT NULL, `maxUnlocksPerDay` INTEGER NOT NULL, `emergencyUnlockMinutes` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, PRIMARY KEY(`targetPackage`))",
+        "fields": [
+          {
+            "fieldPath": "targetPackage",
+            "columnName": "targetPackage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetName",
+            "columnName": "targetName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "limitMinutes",
+            "columnName": "limitMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startHour",
+            "columnName": "startHour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endHour",
+            "columnName": "endHour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "restrictionMode",
+            "columnName": "restrictionMode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "missionType",
+            "columnName": "missionType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unlockMinutes",
+            "columnName": "unlockMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "approved",
+            "columnName": "approved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activeDaysMask",
+            "columnName": "activeDaysMask",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sessionLimitMinutes",
+            "columnName": "sessionLimitMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxUnlocksPerDay",
+            "columnName": "maxUnlocksPerDay",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "emergencyUnlockMinutes",
+            "columnName": "emergencyUnlockMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "enabled",
+            "columnName": "enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "targetPackage"
+          ]
+        }
+      },
+      {
+        "tableName": "mission_log",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `targetPackage` TEXT NOT NULL, `missionType` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `completedAt` INTEGER NOT NULL, `success` INTEGER NOT NULL, `unlockMinutesGranted` INTEGER NOT NULL, `reasonText` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetPackage",
+            "columnName": "targetPackage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "missionType",
+            "columnName": "missionType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startedAt",
+            "columnName": "startedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completedAt",
+            "columnName": "completedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "success",
+            "columnName": "success",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unlockMinutesGranted",
+            "columnName": "unlockMinutesGranted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reasonText",
+            "columnName": "reasonText",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "guard_event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `packageName` TEXT NOT NULL, `eventType` TEXT NOT NULL, `blocked` INTEGER NOT NULL, `unlockTokenValid` INTEGER NOT NULL, `missionResult` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "packageName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventType",
+            "columnName": "eventType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "blocked",
+            "columnName": "blocked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unlockTokenValid",
+            "columnName": "unlockTokenValid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "missionResult",
+            "columnName": "missionResult",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "unlock_session",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `packageName` TEXT NOT NULL, `reason` TEXT NOT NULL, `issuedAtElapsedRealtime` INTEGER NOT NULL, `expiresAtElapsedRealtime` INTEGER NOT NULL, `issuedAtWallClock` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "packageName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reason",
+            "columnName": "reason",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "issuedAtElapsedRealtime",
+            "columnName": "issuedAtElapsedRealtime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expiresAtElapsedRealtime",
+            "columnName": "expiresAtElapsedRealtime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "issuedAtWallClock",
+            "columnName": "issuedAtWallClock",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "usage_daily",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `totalScreenTimeMinutes` INTEGER NOT NULL, `nightMinutes` INTEGER NOT NULL, `unlockCountEstimate` INTEGER NOT NULL, `topAppPackage` TEXT NOT NULL, `topAppName` TEXT NOT NULL, `topAppMinutes` INTEGER NOT NULL, `videoMinutes` INTEGER NOT NULL, `snsMinutes` INTEGER NOT NULL, `gameMinutes` INTEGER NOT NULL, `productivityMinutes` INTEGER NOT NULL, `otherMinutes` INTEGER NOT NULL, `sessionCount` INTEGER NOT NULL, `averageSessionMinutes` INTEGER NOT NULL, `maxSessionMinutes` INTEGER NOT NULL, `dataQuality` TEXT NOT NULL, `collectionNote` TEXT NOT NULL, `capturedAt` INTEGER NOT NULL, PRIMARY KEY(`date`))",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalScreenTimeMinutes",
+            "columnName": "totalScreenTimeMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nightMinutes",
+            "columnName": "nightMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unlockCountEstimate",
+            "columnName": "unlockCountEstimate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "topAppPackage",
+            "columnName": "topAppPackage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "topAppName",
+            "columnName": "topAppName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "topAppMinutes",
+            "columnName": "topAppMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "videoMinutes",
+            "columnName": "videoMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "snsMinutes",
+            "columnName": "snsMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gameMinutes",
+            "columnName": "gameMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productivityMinutes",
+            "columnName": "productivityMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "otherMinutes",
+            "columnName": "otherMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sessionCount",
+            "columnName": "sessionCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "averageSessionMinutes",
+            "columnName": "averageSessionMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxSessionMinutes",
+            "columnName": "maxSessionMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataQuality",
+            "columnName": "dataQuality",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "collectionNote",
+            "columnName": "collectionNote",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "capturedAt",
+            "columnName": "capturedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "date"
+          ]
+        }
+      },
+      {
+        "tableName": "app_usage_daily",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `packageName` TEXT NOT NULL, `appName` TEXT NOT NULL, `category` TEXT NOT NULL, `usageMinutes` INTEGER NOT NULL, `nightMinutes` INTEGER NOT NULL, `openCount` INTEGER NOT NULL, `sessionCount` INTEGER NOT NULL, `averageSessionMinutes` INTEGER NOT NULL, `maxSessionMinutes` INTEGER NOT NULL, `firstOpenTime` INTEGER NOT NULL, `lastTimeUsed` INTEGER NOT NULL, `capturedAt` INTEGER NOT NULL, PRIMARY KEY(`date`, `packageName`))",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "packageName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appName",
+            "columnName": "appName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "usageMinutes",
+            "columnName": "usageMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nightMinutes",
+            "columnName": "nightMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openCount",
+            "columnName": "openCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sessionCount",
+            "columnName": "sessionCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "averageSessionMinutes",
+            "columnName": "averageSessionMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxSessionMinutes",
+            "columnName": "maxSessionMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstOpenTime",
+            "columnName": "firstOpenTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastTimeUsed",
+            "columnName": "lastTimeUsed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "capturedAt",
+            "columnName": "capturedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "date",
+            "packageName"
+          ]
+        }
+      },
+      {
+        "tableName": "notification_daily",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `packageName` TEXT NOT NULL, `appName` TEXT NOT NULL, `notificationCount` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`date`, `packageName`))",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "packageName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appName",
+            "columnName": "appName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notificationCount",
+            "columnName": "notificationCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "date",
+            "packageName"
+          ]
+        }
+      },
+      {
+        "tableName": "user_goal",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `rawText` TEXT NOT NULL, `targetName` TEXT NOT NULL, `targetPackage` TEXT NOT NULL, `timeRange` TEXT NOT NULL, `limitMinutes` INTEGER NOT NULL, `intensity` TEXT NOT NULL, `missionType` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `isActive` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rawText",
+            "columnName": "rawText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetName",
+            "columnName": "targetName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetPackage",
+            "columnName": "targetPackage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeRange",
+            "columnName": "timeRange",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "limitMinutes",
+            "columnName": "limitMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intensity",
+            "columnName": "intensity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "missionType",
+            "columnName": "missionType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "isActive",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "prediction_result",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `predictedNextDayMinutes` INTEGER NOT NULL, `riskLevel` TEXT NOT NULL, `habitType` TEXT NOT NULL, `mainReason` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`date`))",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "predictedNextDayMinutes",
+            "columnName": "predictedNextDayMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "riskLevel",
+            "columnName": "riskLevel",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "habitType",
+            "columnName": "habitType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mainReason",
+            "columnName": "mainReason",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "date"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '959906f5016d2e72144c2bea86ea7abd')"
+    ]
+  }
+}

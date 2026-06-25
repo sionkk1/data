@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.HabitGuard" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">#F6F3EC</item>
+        <item name="android:colorAccent">#147A73</item>
+    </style>
+</resources>

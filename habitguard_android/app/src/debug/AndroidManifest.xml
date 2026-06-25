@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application>
+        <receiver
+            android:name=".debug.DebugExportReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.habitguard.app.DEBUG_EXPORT_CSV" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

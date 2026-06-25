@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">HabitGuard</string>
+    <string name="accessibility_service_description">승인한 제한 규칙에 따라 실행 중인 앱을 감지하고 미션 화면을 표시합니다.</string>
+</resources>

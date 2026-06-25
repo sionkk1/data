@@ -1,0 +1,43 @@
+{
+  "numeric_features": [
+    "total_minutes",
+    "night_minutes",
+    "open_count",
+    "notification_count",
+    "app_count",
+    "top_app_minutes",
+    "avg_session_minutes_proxy",
+    "night_ratio",
+    "notification_per_open",
+    "rolling_3d_total",
+    "rolling_7d_total",
+    "previous_day_total",
+    "personal_goal_minutes",
+    "video",
+    "sns",
+    "game",
+    "browser",
+    "productivity",
+    "other"
+  ],
+  "categorical_features": [
+    "weekday",
+    "is_weekend"
+  ],
+  "excluded_columns": [
+    "date",
+    "goal_risk_label",
+    "next_day_goal_minutes",
+    "source_type",
+    "target_goal_exceeded",
+    "target_next_day_minutes",
+    "user_id",
+    "user_type_label"
+  ],
+  "target_columns": [
+    "goal_risk_label",
+    "target_goal_exceeded",
+    "target_next_day_minutes",
+    "user_type_label"
+  ]
+}
