@@ -1,155 +1,157 @@
-# HabitGuard Project Report
+# HabitGuard 프로젝트 보고서
 
-Last updated: 2026-06-26 KST
+최종 갱신: 2026-06-26 KST
 
-## 1. Project Summary
+## 1. 프로젝트 요약
 
-HabitGuard is an Android-first screen-time habit improvement app. It collects app-level usage metadata locally, builds daily features, runs offline prediction models, and helps users review self-approved interruption rules.
+HabitGuard는 스마트폰 사용 습관 개선을 목표로 하는 Android-first 앱입니다. 앱별 사용 기록을 기기 안에서 수집하고, 일별 특징을 만들고, 오프라인 예측 모델을 실행한 뒤, 사용자가 직접 승인한 제한 규칙과 미션 화면으로 충동적인 앱 실행을 줄이도록 돕습니다.
 
-This is not a Flutter rewrite and not a server-first prototype. The current implementation is a native Kotlin + Jetpack Compose Android app with Room, WorkManager, UsageStatsManager, AccessibilityService, and a local JSON-bundle AI model.
+이 프로젝트는 실제 Android 네이티브 Kotlin + Jetpack Compose 앱입니다. 서버가 없어도 사용 기록 수집, 일별 집계, AI 추론, 예측 결과 저장, 대시보드 표시가 동작하는 local-first 구조를 갖습니다.
 
-![Dashboard](screen_timing_design/captures/home.png)
+![대시보드](screen_timing_design/captures/home.png)
 
-## 2. One-Page Infographic
+## 2. 한눈에 보는 인포그래픽
 
-| Stage | Evidence | Output |
+| 단계 | 사용 기술 / 근거 | 결과물 |
 | --- | --- | --- |
-| Collect | `UsageStatsManager`, `UsageEvents` | App usage minutes, night minutes, opens |
-| Aggregate | `UsageEventAggregator`, Room DAOs | `usage_daily`, `app_usage_daily` |
-| Predict | `android_inference_bundle.json`, Kotlin local model | Next-day minutes, over-goal probability |
-| Store | `PredictionResultEntity` | Local prediction history |
-| Guide | Compose dashboard and rule review | Measured values, model source, caveat, recommendation |
-| Interrupt | AccessibilityService + LockActivity | User-approved mission flow |
+| 수집 | `UsageStatsManager`, `UsageEvents` | 앱 사용 시간, 야간 사용, 실행 횟수 |
+| 집계 | `UsageEventAggregator`, Room DAO | `usage_daily`, `app_usage_daily` |
+| 예측 | `android_inference_bundle.json`, Kotlin 로컬 모델 | 다음 날 사용시간, 목표 초과 확률 |
+| 저장 | `PredictionResultEntity` | 로컬 예측 기록 |
+| 안내 | Compose 대시보드, 규칙 검토 화면 | 측정값, 모델 출처, 한계 문구, 추천 |
+| 개입 | AccessibilityService, LockActivity | 사용자 승인 기반 미션 흐름 |
 
 ```mermaid
 flowchart TD
-    P[Problem: impulsive app use] --> C[Collect app usage metadata]
-    C --> F[Create daily features]
-    F --> M[Offline local model]
-    M --> R[Risk and next-day usage estimate]
-    R --> U[User reviews recommendation]
-    U -->|Approves| G[Guard rule]
-    U -->|Rejects| N[No rule applied]
-    G --> L[Lock/Mission interruption]
+    P[문제: 충동적인 앱 사용] --> C[앱 사용 메타데이터 수집]
+    C --> F[일별 feature 생성]
+    F --> M[오프라인 로컬 모델]
+    M --> R[다음 날 사용시간과 위험도 예측]
+    R --> U[사용자가 추천 규칙 검토]
+    U -->|승인| G[Guard 규칙 저장]
+    U -->|거절| N[규칙 적용 안 함]
+    G --> L[Lock/Mission 화면]
 ```
 
-## 3. Data Pipeline
+## 3. 데이터 수집 파이프라인
 
-HabitGuard does not read Digital Wellbeing's internal database. It uses Android's public `UsageStatsManager` API after the user grants Usage Access.
+HabitGuard는 Digital Wellbeing 내부 DB를 직접 읽지 않습니다. 사용자가 Usage Access 권한을 허용한 뒤 Android의 공식 `UsageStatsManager` API로 앱 사용 메타데이터를 읽습니다.
 
 ```mermaid
 sequenceDiagram
-    participant Android as Android Usage APIs
-    participant App as HabitGuard app
+    participant Android as Android Usage API
+    participant App as HabitGuard 앱
     participant Room as Room DB
     participant Worker as WorkManager
-    participant AI as Local model
+    participant AI as 로컬 모델
     Android->>App: UsageStats / UsageEvents
     App->>Room: usage_daily, app_usage_daily
-    Worker->>Room: refresh daily summaries
-    Worker->>AI: build features from Room rows
-    AI->>Room: prediction_result
-    Room->>App: dashboard state
+    Worker->>Room: 일별 요약 갱신
+    Worker->>AI: Room row로 feature 생성
+    AI->>Room: prediction_result 저장
+    Room->>App: 대시보드 상태 표시
 ```
 
-### Current local data tables
+### 현재 로컬 DB 테이블
 
-| Table | Purpose |
+| 테이블 | 역할 |
 | --- | --- |
-| `usage_daily` | Per-day total usage, night usage, category totals, sessions, data quality |
-| `app_usage_daily` | Per-app daily usage rows |
-| `prediction_result` | Stored local prediction summaries |
-| `restriction_rule` | User-approved restriction rules |
-| `mission_log` | Mission attempt history |
-| `guard_event` | Guard flow events |
-| `notification_daily` | Per-app notification counts only |
+| `usage_daily` | 날짜별 총 사용시간, 야간 사용, 카테고리별 사용, 세션 수, 데이터 품질 |
+| `app_usage_daily` | 앱별 날짜별 사용 기록 |
+| `prediction_result` | 로컬 예측 결과 |
+| `restriction_rule` | 사용자가 승인한 제한 규칙 |
+| `mission_log` | 미션 시도 기록 |
+| `guard_event` | 제한 감지 및 우회 관련 이벤트 |
+| `notification_daily` | 앱별 알림 개수만 저장, 알림 본문은 저장하지 않음 |
 
 ## 4. Feature Engineering
 
-The Python and Kotlin paths share the same feature order through `android_inference_bundle.json`.
+Python 학습 파이프라인과 Android Kotlin 추론은 `android_inference_bundle.json`에 저장된 동일한 feature 순서를 사용합니다.
 
-Core feature groups:
+주요 feature 그룹:
 
-- Total and night usage minutes
-- App open count and app count
-- Top app minutes
-- Session proxy features
-- Notification count and notification-per-open
-- Rolling 3-day and 7-day totals
-- Personal goal minutes
-- Category usage: video, SNS, game, browser, productivity, other
-- Weekday and weekend one-hot features
+- 총 사용시간과 야간 사용시간
+- 앱 실행 횟수와 사용 앱 수
+- 가장 많이 사용한 앱의 사용시간
+- 세션 길이 proxy
+- 알림 개수와 실행당 알림 비율
+- 최근 3일 / 7일 평균 사용시간
+- 개인 목표 시간
+- 카테고리별 사용시간: 영상, SNS, 게임, 브라우저, 생산성, 기타
+- 요일과 주말 여부 one-hot feature
 
-Target columns are explicitly excluded from features:
+미래 정답이나 label은 feature에서 제외합니다.
 
 - `target_next_day_minutes`
 - `target_goal_exceeded`
 - `goal_risk_label`
 - `user_type_label`
 
-## 5. Model Pipeline
+## 5. 예측 모델 구조
 
-The current selected models are intentionally simple and explainable:
+현재 앱에 연결된 모델은 단순하고 설명 가능한 모델을 선택했습니다.
 
-| Task | Model | Reason |
+| 과제 | 모델 | 선택 이유 |
 | --- | --- | --- |
-| Next-day total screen-time prediction | Linear Regression | Fast, explainable, easy to export as coefficients |
-| Goal-exceedance risk | Logistic Regression | Produces probability and class label offline |
-| User type classification | Auxiliary analysis only | Not used as the main app decision model |
+| 다음 날 총 스크린타임 예측 | Linear Regression | 빠르고 설명 가능하며 계수로 Android export 가능 |
+| 목표 초과 위험 분류 | Logistic Regression | 확률과 class label을 오프라인에서 계산 가능 |
+| 사용자 유형 분류 | 보조 분석 모델 | 앱의 핵심 의사결정 모델로 직접 사용하지 않음 |
 
 ```mermaid
 flowchart LR
-    A[Raw daily features] --> B[Missing value imputer]
-    B --> C[StandardScaler numeric features]
-    B --> D[One-hot categorical features]
-    C --> E[Final feature vector]
+    A[일별 원본 feature] --> B[결측값 처리]
+    B --> C[숫자 feature StandardScaler]
+    B --> D[범주 feature One-hot]
+    C --> E[최종 feature vector]
     D --> E
-    E --> F[Linear Regression coefficients]
-    E --> G[Logistic Regression coefficients]
-    F --> H[Predicted next-day minutes]
-    G --> I[Over-goal probability]
+    E --> F[Linear Regression 계수]
+    E --> G[Logistic Regression 계수]
+    F --> H[다음 날 예상 사용시간]
+    G --> I[목표 초과 확률]
 ```
 
-## 6. Synthetic Evaluation Results
+## 6. 합성 데이터 평가 결과
 
-The following numbers are from synthetic evaluation only.
+아래 수치는 합성 데이터 평가 결과입니다. 실제 사용자 성능으로 주장하면 안 됩니다.
 
-| Metric | Value |
+| 지표 | 값 |
 | --- | ---: |
-| Regression MAE | 18.1632 minutes |
-| Regression RMSE | 23.8108 minutes |
-| Regression R2 | 0.8774 |
-| Regression improvement vs best baseline | 55.3482% |
-| Classification accuracy | 0.8611 |
-| Classification macro F1 | 0.8495 |
-| High-risk recall | 0.84 |
-| Classification improvement vs majority baseline | 115.0629% |
+| 회귀 MAE | 18.1632분 |
+| 회귀 RMSE | 23.8108분 |
+| 회귀 R2 | 0.8774 |
+| 회귀 best baseline 대비 개선율 | 55.3482% |
+| 분류 Accuracy | 0.8611 |
+| 분류 Macro F1 | 0.8495 |
+| 고위험 Recall | 0.84 |
+| 다수 클래스 baseline 대비 개선율 | 115.0629% |
 
-![Actual vs predicted](../ai/phone_outputs/poster_assets/actual_vs_predicted.png)
+![실제값과 예측값 비교](../ai/phone_outputs/poster_assets/actual_vs_predicted.png)
 
 ![Feature importance](../ai/phone_outputs/poster_assets/feature_importance.png)
 
-## 7. Confusion Matrix Analysis
+## 7. 혼동 행렬 분석
 
-![Confusion matrix](../ai/phone_outputs/poster_assets/confusion_matrix.png)
+![혼동 행렬](../ai/phone_outputs/poster_assets/confusion_matrix.png)
 
-| Actual / Predicted | within_goal | over_goal |
+| 실제 / 예측 | within_goal | over_goal |
 | --- | ---: | ---: |
 | within_goal | 41 | 6 |
 | over_goal | 4 | 21 |
 
-Analysis:
+분석:
 
-- True positives for over-goal risk: `21`
-- Missed over-goal days: `4`
-- False alarms: `6`
-- High-risk recall: `21 / (21 + 4) = 0.84`
+- 목표 초과 위험일을 맞춘 경우: `21`
+- 목표 초과였지만 놓친 경우: `4`
+- 목표 이내였지만 위험으로 분류한 경우: `6`
+- 고위험 Recall: `21 / (21 + 4) = 0.84`
 
-This behavior is acceptable for a habit-support prototype because missing a high-risk day is more harmful than showing a cautious warning. However, these numbers are not real-user performance. They only prove the training/evaluation/export pipeline is reproducible.
+습관 개선 앱에서는 위험일을 놓치는 것이 더 큰 문제일 수 있으므로, 어느 정도의 false alarm은 감수할 수 있습니다. 다만 이 판단은 합성 데이터 기준이며, 실제 사용자에게 일반화하려면 실제 export 데이터로 재학습과 재평가가 필요합니다.
 
-## 8. Android Local Inference
+## 8. Android 로컬 추론 방식
 
-The app does not load `.joblib` files. Python exports a platform-neutral JSON bundle:
+Android 앱은 Python `.joblib` 파일을 직접 읽지 않습니다. Python은 Android가 읽을 수 있는 JSON bundle을 export합니다.
+
+포함 필드:
 
 - `schema_version`
 - `model_version`
@@ -169,43 +171,44 @@ The app does not load `.joblib` files. Python exports a platform-neutral JSON bu
 - `classification_model.positive_class`
 - `training_manifest_hash`
 
-Kotlin loads and validates this bundle with `ModelBundleLoader`, then computes the same math in `TrainedLocalPredictionModel`.
+Kotlin의 `ModelBundleLoader`가 bundle schema를 검증하고, `TrainedLocalPredictionModel`이 동일한 수학식을 계산합니다.
 
-Parity tests:
+동일성 테스트:
 
-| Check | Required tolerance | Current test |
+| 검증 항목 | 허용 오차 | 테스트 |
 | --- | ---: | --- |
-| Regression prediction | <= 0.1 minute | `TrainedLocalPredictionModelTest` |
-| Classification probability | <= 0.001 | `TrainedLocalPredictionModelTest` |
+| 회귀 예측값 | 0.1분 이하 | `TrainedLocalPredictionModelTest` |
+| 분류 확률 | 0.001 이하 | `TrainedLocalPredictionModelTest` |
 
-## 9. App Screens
+## 9. 앱 화면 구성
 
-| Analysis | Goal | Privacy |
+| 분석 | 목표 입력 | 개인정보 / 설정 |
 | --- | --- | --- |
-| ![Analysis](screen_timing_design/captures/analysis.png) | ![Goal](screen_timing_design/captures/goal.png) | ![Privacy](screen_timing_design/captures/privacy.png) |
+| ![분석](screen_timing_design/captures/analysis.png) | ![목표](screen_timing_design/captures/goal.png) | ![개인정보](screen_timing_design/captures/privacy.png) |
 
-## 10. Privacy And Safety
+## 10. 개인정보와 안전 원칙
 
-HabitGuard uses a local-first data boundary:
+HabitGuard는 local-first 원칙을 따릅니다.
 
-- Raw usage summaries stay in Room.
-- Notification body text is not stored.
-- AccessibilityService is configured with `canRetrieveWindowContent=false`.
-- Prediction requests do not need a server.
-- Cloud sync is not required for local AI.
-- Restriction rules are not auto-applied by model results.
+- 원시 사용 요약은 Room DB에 로컬 저장합니다.
+- 알림 본문은 저장하지 않습니다.
+- AccessibilityService는 `canRetrieveWindowContent=false`로 설정되어 화면 내용이나 입력 문장을 읽지 않습니다.
+- 예측은 서버 없이 동작합니다.
+- 클라우드 동기화는 현재 예측에 필요하지 않습니다.
+- 모델 결과만으로 제한 규칙을 자동 적용하지 않습니다.
 
-## 11. Current Limitations
+## 11. 현재 한계
 
-- The current model is trained on synthetic data.
-- Real collected usage can feed inference, but real-user model performance is not proven.
-- Android app interruption is not the same as OS-level app blocking.
-- Full Guard v2 real-device scenarios still need manual evidence.
-- GitHub/public releases must not include private `data/raw` phone exports.
+- 현재 모델은 합성 데이터로 학습됐습니다.
+- 실제 수집 사용 기록은 추론 입력으로 사용할 수 있지만, 실제 사용자 모델 성능은 아직 검증되지 않았습니다.
+- Android 일반 앱은 다른 앱을 OS 수준에서 완전히 차단할 수 없습니다.
+- HabitGuard의 제한 기능은 사용자 승인 기반의 사용 중단/미션 흐름입니다.
+- Guard v2 실제 기기 시나리오는 추가 수동 검증이 필요합니다.
+- 공개 GitHub에는 `data/raw`의 실제 휴대폰 export를 올리면 안 됩니다.
 
-## 12. Reproducibility
+## 12. 재현 방법
 
-Run Android checks:
+Android 확인:
 
 ```powershell
 .\gradlew.bat --no-daemon :app:assembleDebug
@@ -213,14 +216,14 @@ Run Android checks:
 .\gradlew.bat --no-daemon :app:lintDebug
 ```
 
-Run Python ML checks:
+Python ML 확인:
 
 ```powershell
 python ai\train_from_phone_csv.py --output-dir ai\phone_outputs --update-android-asset
 python -m unittest tests\test_train_from_phone_csv.py
 ```
 
-Primary documentation:
+주요 근거 문서:
 
 - `PROJECT_AUDIT.md`
 - `PROJECT_TODO.md`
